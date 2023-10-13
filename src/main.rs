@@ -5,6 +5,7 @@ use anyhow::{anyhow, Result};
 use clap::Parser;
 use std::fs;
 use std::path::Path;
+use yaml_rust::{YamlEmitter, YamlLoader};
 
 #[derive(Parser)]
 #[clap(author, version, about, long_about = None )]
@@ -23,7 +24,25 @@ fn main() -> Result<()> {
 
     let raw = fs::read_to_string(manifest_path)?;
 
-    println!("{}", raw);
+    let docs = YamlLoader::load_from_str(raw.as_str())?;
+
+    println!("{}", docs.len());
+
+    match docs.len() {
+        0 => {
+            return Err(anyhow!(
+                "No YAML documents found in {}",
+                manifest_path.display()
+            ))
+        }
+        1 => (),
+        _ => {
+            return Err(anyhow!(
+                "More than one YAML documents found in {}",
+                manifest_path.display()
+            ))
+        }
+    }
 
     Ok(())
 }
