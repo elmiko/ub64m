@@ -5,7 +5,8 @@ use anyhow::{anyhow, Result};
 use clap::Parser;
 use std::fs;
 use std::path::Path;
-use yaml_rust::{YamlEmitter, YamlLoader};
+use ub64m::load_yaml_from_string;
+use yaml_rust::YamlEmitter;
 
 #[derive(Parser)]
 #[clap(author, version, about, long_about = None )]
@@ -19,34 +20,19 @@ fn main() -> Result<()> {
 
     let manifest_path: &Path = cli.filename.as_ref();
     if !manifest_path.is_file() {
-        return Err(anyhow!("Path is not a file {}", manifest_path.display()));
+        return Err(anyhow!(
+            "Error: supplied path is not a file {}",
+            manifest_path.display()
+        ));
     }
 
     let raw = fs::read_to_string(manifest_path)?;
 
-    let docs = YamlLoader::load_from_str(raw.as_str())?;
-
-    match docs.len() {
-        0 => {
-            return Err(anyhow!(
-                "No YAML documents found in {}",
-                manifest_path.display()
-            ))
-        }
-        1 => (),
-        _ => {
-            return Err(anyhow!(
-                "More than one YAML documents found in {}",
-                manifest_path.display()
-            ))
-        }
-    }
-
-    let manifest = &docs[0];
+    let manifest = load_yaml_from_string(raw)?;
 
     let mut out_yaml = String::new();
     let mut emitter = YamlEmitter::new(&mut out_yaml);
-    emitter.dump(manifest)?;
+    emitter.dump(&manifest)?;
 
     println!("{}", out_yaml);
 
