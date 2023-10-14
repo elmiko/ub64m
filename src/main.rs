@@ -26,8 +26,6 @@ fn main() -> Result<()> {
 
     let docs = YamlLoader::load_from_str(raw.as_str())?;
 
-    println!("{}", docs.len());
-
     match docs.len() {
         0 => {
             return Err(anyhow!(
@@ -43,6 +41,14 @@ fn main() -> Result<()> {
             ))
         }
     }
+
+    let manifest = &docs[0];
+
+    let mut out_yaml = String::new();
+    let mut emitter = YamlEmitter::new(&mut out_yaml);
+    emitter.dump(manifest)?;
+
+    println!("{}", out_yaml);
 
     Ok(())
 }
