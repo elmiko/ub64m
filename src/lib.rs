@@ -2,9 +2,21 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 use anyhow::{anyhow, Result};
+use std::fs;
+use std::path::Path;
 use yaml_rust::{Yaml, YamlLoader};
 
-pub fn load_yaml_from_string(raw: String) -> Result<Yaml> {
+pub fn manifest_from_filename(filename: String) -> Result<Yaml> {
+    let path: &Path = filename.as_ref();
+    if !path.is_file() {
+        return Err(anyhow!("supplied path must reference a YAML file."));
+    }
+
+    let raw = fs::read_to_string(path)?;
+    return load_yaml_from_string(raw);
+}
+
+fn load_yaml_from_string(raw: String) -> Result<Yaml> {
     let docs = YamlLoader::load_from_str(raw.as_str())?;
 
     match docs.len() {
