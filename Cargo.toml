@@ -1,9 +1,11 @@
 [package]
 name = "ub64m"
-version = "0.1.0"
+version = "0.1.99"
 edition = "2021"
 license = "GPL-3.0-or-later"
 readme = "README.md"
+repository = "https://github.com/elmiko/ub64m"
+description = "A cli tool for decoding base64 values in JSON and YAML"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
