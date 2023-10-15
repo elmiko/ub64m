@@ -4,6 +4,9 @@ mod tests {
     use yaml_rust::yaml::Hash;
     use yaml_rust::Yaml;
 
+    const hello_world: &str = "Hello World!";
+    const hello_world_encoded: &str = "SGVsbG8gV29ybGQhCg==";
+
     #[test]
     fn decode_real() {
         let mut src = Yaml::Real(String::from("0.1"));
@@ -20,16 +23,16 @@ mod tests {
 
     #[test]
     fn decode_non_base64_string() {
-        let mut src = Yaml::String(String::from("Hello World!"));
+        let mut src = Yaml::String(String::from(hello_world));
         decode_yaml_in_place(&mut src);
-        assert_eq!(src.as_str().unwrap(), "Hello World!");
+        assert_eq!(src.as_str().unwrap(), hello_world);
     }
 
     #[test]
     fn decode_base64_string() {
-        let mut src = Yaml::String(String::from("SGVsbG8gV29ybGQhCg=="));
+        let mut src = Yaml::String(String::from(hello_world_encoded));
         decode_yaml_in_place(&mut src);
-        assert_eq!(src.as_str().unwrap(), "Hello World!");
+        assert_eq!(src.as_str().unwrap(), hello_world);
     }
 
     #[test]
