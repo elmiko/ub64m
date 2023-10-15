@@ -44,9 +44,18 @@ mod tests {
 
     #[test]
     fn decode_array() {
-        let mut src = Yaml::Array(vec![Yaml::Integer(1), Yaml::String(String::from("Foo!"))]);
+        let expected = vec![
+            Yaml::Integer(1),
+            Yaml::String(String::from("Foo!")),
+            Yaml::String(String::from(hello_world)),
+        ];
+        let mut src = Yaml::Array(vec![
+            Yaml::Integer(1),
+            Yaml::String(String::from("Foo!")),
+            Yaml::String(String::from(hello_world_encoded)),
+        ]);
         decode_yaml_in_place(&mut src);
-        assert!(src.is_array());
+        assert_eq!(src.as_vec().unwrap(), &expected);
     }
 
     #[test]

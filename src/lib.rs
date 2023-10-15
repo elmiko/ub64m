@@ -16,6 +16,11 @@ use yaml_rust::{Yaml, YamlLoader};
 /// untouched. Replaces the value in-place.
 pub fn decode_yaml_in_place(yaml: &mut Yaml) {
     match yaml {
+        Yaml::Array(vec) => {
+            for mut v in vec {
+                decode_yaml_in_place(&mut v);
+            }
+        }
         Yaml::String(src) => {
             if let Ok(bytes) = general_purpose::STANDARD.decode(src.as_str()) {
                 if let Ok(decoded) = str::from_utf8(&bytes) {
