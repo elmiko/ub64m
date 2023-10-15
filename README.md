@@ -10,7 +10,7 @@ print the output as a new [YAML][yaml] file.
 
 ## Example use
 
-```shell
+```
 $ cat tests/data/encoded-sample.yaml
 ---
 Encoded: SGVsbG8gV29ybGQhCg==
