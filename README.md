@@ -27,5 +27,16 @@ SomethingElse:
   Value: 9000
 ```
 
+## Install using cargo
+
+From `$HOME` in your terminal type the following:
+
+```
+cargo install ub64m
+```
+
+This will install the `ub64m` binary to the `.cargo/bin` directory, please
+note that this will need to be in your `$PATH` for easier use.
+
 [json]: https://json.org
 [yaml]: https://yaml.org
