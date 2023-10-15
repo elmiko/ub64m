@@ -13,20 +13,20 @@ use yaml_rust::{Yaml, YamlLoader};
 pub fn decode_yaml_in_place(yaml: &mut Yaml) {
     match yaml {
         Yaml::Array(vec) => {
-            for mut v in vec {
-                decode_yaml_in_place(&mut v);
+            for v in vec {
+                decode_yaml_in_place(v);
             }
         }
         Yaml::Hash(hash) => {
-            let mut iter = hash.iter_mut();
-            while let Some(mut val) = iter.next() {
-                decode_yaml_in_place(&mut val.1);
+            let iter = hash.iter_mut();
+            for val in iter {
+                decode_yaml_in_place(val.1);
             }
         }
         Yaml::String(src) => {
             if let Ok(bytes) = general_purpose::STANDARD.decode(src.as_str()) {
                 if let Ok(decoded) = str::from_utf8(&bytes) {
-                    if let Some(stripped) = decoded.strip_suffix("\n") {
+                    if let Some(stripped) = decoded.strip_suffix('\n') {
                         *yaml = Yaml::String(String::from(stripped));
                     } else {
                         *yaml = Yaml::String(String::from(decoded));
@@ -47,23 +47,19 @@ pub fn manifest_from_filename(filename: String) -> Result<Yaml> {
     }
 
     let raw = fs::read_to_string(path)?;
-    return load_yaml_from_string(raw);
+    load_yaml_from_string(raw)
 }
 
 fn load_yaml_from_string(raw: String) -> Result<Yaml> {
     let docs = YamlLoader::load_from_str(raw.as_str())?;
 
     match docs.len() {
-        0 => {
-            return Err(anyhow!(
+        0 => Err(anyhow!(
                 "no YAML documents found in manifest file, please check source file format."
-            ))
-        }
-        1 => return Ok(docs[0].clone()),
-        _ => {
-            return Err(anyhow!(
+            )),
+        1 => Ok(docs[0].clone()),
+        _ => Err(anyhow!(
                 "more than one YAML document found in manifest file, only single document manifests are supported."
-            ))
-        }
+            )),
     }
 }
