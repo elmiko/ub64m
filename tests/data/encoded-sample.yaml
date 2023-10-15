@@ -1,6 +1,6 @@
 ---
 Encoded: SGVsbG8gV29ybGQhCg==
 SomethingElse:
-  Name: "Foo Bar!"
-  DoTheThing: True
+  Name: Foo Bar!
+  DoTheThing: true
   Value: 9000
