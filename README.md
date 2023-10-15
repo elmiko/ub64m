@@ -13,18 +13,30 @@ print the output as a new [YAML][yaml] file.
 ```
 $ cat tests/data/encoded-sample.yaml
 ---
-Encoded: SGVsbG8gV29ybGQhCg==
-SomethingElse:
-  Name: Foo Bar!
-  DoTheThing: true
-  Value: 9000
-$ ./target/debug/ub64m ./tests/data/encoded-sample.yaml 
+Name: Cloud Configuration
+Version: 1
+Private: true
+Account:
+  User: Qm9iCg==
+  Zones:
+    - ZWFzdC0xLWEK
+    - ZWFzdC0xLWIK
+    - c291dGgtMi1hCg==
+  ProjectName: Ym9icy1iaWctcHJvamVjdAo=
+  Token: c3VwZXItc2VjcmV0Cg==
+$ ./target/debug/ub64m tests/data/encoded-sample.yaml
 ---
-Encoded: Hello World!
-SomethingElse:
-  Name: Foo Bar!
-  DoTheThing: true
-  Value: 9000
+Name: Cloud Configuration
+Version: 1
+Private: true
+Account:
+  User: Bob
+  Zones:
+    - east-1-a
+    - east-1-b
+    - south-2-a
+  ProjectName: bobs-big-project
+  Token: super-secret
 ```
 
 ## Install using cargo

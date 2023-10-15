@@ -1,6 +1,12 @@
 ---
-Encoded: SGVsbG8gV29ybGQhCg==
-SomethingElse:
-  Name: Foo Bar!
-  DoTheThing: true
-  Value: 9000
+Name: Cloud Configuration
+Version: 1
+Private: true
+Account:
+  User: Qm9iCg==
+  Zones:
+    - ZWFzdC0xLWEK
+    - ZWFzdC0xLWIK
+    - c291dGgtMi1hCg==
+  ProjectName: Ym9icy1iaWctcHJvamVjdAo=
+  Token: c3VwZXItc2VjcmV0Cg==
