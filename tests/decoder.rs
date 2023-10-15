@@ -4,8 +4,8 @@ mod tests {
     use yaml_rust::yaml::Hash;
     use yaml_rust::Yaml;
 
-    const hello_world: &str = "Hello World!";
-    const hello_world_encoded: &str = "SGVsbG8gV29ybGQhCg==";
+    const HELLO_WORLD: &str = "Hello World!";
+    const HELLO_WORLD_ENCODED: &str = "SGVsbG8gV29ybGQhCg==";
 
     #[test]
     fn decode_real() {
@@ -23,16 +23,16 @@ mod tests {
 
     #[test]
     fn decode_non_base64_string() {
-        let mut src = Yaml::String(String::from(hello_world));
+        let mut src = Yaml::String(String::from(HELLO_WORLD));
         decode_yaml_in_place(&mut src);
-        assert_eq!(src.as_str().unwrap(), hello_world);
+        assert_eq!(src.as_str().unwrap(), HELLO_WORLD);
     }
 
     #[test]
     fn decode_base64_string() {
-        let mut src = Yaml::String(String::from(hello_world_encoded));
+        let mut src = Yaml::String(String::from(HELLO_WORLD_ENCODED));
         decode_yaml_in_place(&mut src);
-        assert_eq!(src.as_str().unwrap(), hello_world);
+        assert_eq!(src.as_str().unwrap(), HELLO_WORLD);
     }
 
     #[test]
@@ -47,12 +47,12 @@ mod tests {
         let expected = vec![
             Yaml::Integer(1),
             Yaml::String(String::from("Foo!")),
-            Yaml::String(String::from(hello_world)),
+            Yaml::String(String::from(HELLO_WORLD)),
         ];
         let mut src = Yaml::Array(vec![
             Yaml::Integer(1),
             Yaml::String(String::from("Foo!")),
-            Yaml::String(String::from(hello_world_encoded)),
+            Yaml::String(String::from(HELLO_WORLD_ENCODED)),
         ]);
         decode_yaml_in_place(&mut src);
         assert_eq!(src.as_vec().unwrap(), &expected);
