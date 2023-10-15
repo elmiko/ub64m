@@ -2,11 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 use anyhow::{anyhow, Result};
-use base64::{
-    alphabet,
-    engine::{self, general_purpose},
-    Engine as _,
-};
+use base64::{engine::general_purpose, Engine as _};
 use std::fs;
 use std::path::Path;
 use std::str;
@@ -19,6 +15,12 @@ pub fn decode_yaml_in_place(yaml: &mut Yaml) {
         Yaml::Array(vec) => {
             for mut v in vec {
                 decode_yaml_in_place(&mut v);
+            }
+        }
+        Yaml::Hash(hash) => {
+            let mut iter = hash.iter_mut();
+            while let Some(mut val) = iter.next() {
+                decode_yaml_in_place(&mut val.1);
             }
         }
         Yaml::String(src) => {

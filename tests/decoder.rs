@@ -58,16 +58,27 @@ mod tests {
         assert_eq!(src.as_vec().unwrap(), &expected);
     }
 
-    #[test]
-    fn decode_hash() {
+    fn build_hash() -> Hash {
         let mut h = Hash::new();
         h.insert(
-            Yaml::String(String::from("foo")),
-            Yaml::String(String::from("bar")),
+            Yaml::String(String::from("decoded")),
+            Yaml::String(String::from(HELLO_WORLD)),
         );
+        h.insert(
+            Yaml::String(String::from("encoded")),
+            Yaml::String(String::from(HELLO_WORLD_ENCODED)),
+        );
+        return h;
+    }
+
+    #[test]
+    fn decode_hash() {
+        let mut expected = build_hash();
+        expected[&Yaml::String(String::from("encoded"))] = Yaml::String(String::from(HELLO_WORLD));
+        let h = build_hash();
         let mut src = Yaml::Hash(h);
         decode_yaml_in_place(&mut src);
-        assert!(src.as_hash().is_some());
+        assert_eq!(src.as_hash().unwrap(), &expected);
     }
 
     #[test]
