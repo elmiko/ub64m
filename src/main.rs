@@ -3,7 +3,10 @@
 
 use anyhow::Result;
 use clap::Parser;
-use ub64m::{decode_yaml_in_place, manifest_from_filename};
+use std::io::stdin;
+use std::io::Read;
+use std::str;
+use ub64m::{decode_yaml_in_place, manifest_from_filename, manifest_from_string};
 use yaml_rust::YamlEmitter;
 
 #[derive(Parser)]
@@ -16,7 +19,15 @@ struct Cli {
 fn main() -> Result<()> {
     let cli = Cli::parse();
 
-    let mut manifest = manifest_from_filename(cli.filename)?;
+    let mut manifest = match cli.filename.as_str() {
+        "-" => {
+            let mut buffer = Vec::new();
+            stdin().read_to_end(&mut buffer)?;
+            let raw = str::from_utf8(&buffer)?;
+            manifest_from_string(String::from(raw))?
+        }
+        _ => manifest_from_filename(cli.filename)?,
+    };
 
     decode_yaml_in_place(&mut manifest);
 

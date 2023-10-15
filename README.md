@@ -8,7 +8,7 @@ This tool will take a [JSON][json] or [YAML][yaml] document and decode
 all base64 encoded strings in the values for any field. It will then
 print the output as a new [YAML][yaml] file.
 
-## Example use
+## Example uses
 
 ```
 $ cat tests/data/encoded-sample.yaml
@@ -37,6 +37,38 @@ Account:
     - south-2-a
   ProjectName: bobs-big-project
   Token: super-secret
+```
+
+```
+$ kubectl create -f tests/data/kubernetes-configmap.yaml
+$ kubectl get cm cloud-config -o yaml
+apiVersion: v1
+data:
+  projectName: Ym9icy1iaWctcHJvamVjdAo=
+  token: c3VwZXItc2VjcmV0Cg==
+  user: Qm9iCg==
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2023-10-15T23:50:15Z"
+  name: cloud-config
+  namespace: default
+  resourceVersion: "1776"
+  uid: 7aeee832-4421-472e-a27d-83b4dece0c7f
+[mike@gamebox] devel ~/dev/ub64m
+$ kubectl get cm cloud-config -o yaml | ./target/debug/ub64m -
+---
+apiVersion: v1
+data:
+  projectName: bobs-big-project
+  token: super-secret
+  user: Bob
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2023-10-15T23:50:15Z"
+  name: cloud-config
+  namespace: default
+  resourceVersion: "1776"
+  uid: 7aeee832-4421-472e-a27d-83b4dece0c7f
 ```
 
 ## Install using cargo

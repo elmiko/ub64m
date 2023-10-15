@@ -47,10 +47,11 @@ pub fn manifest_from_filename(filename: String) -> Result<Yaml> {
     }
 
     let raw = fs::read_to_string(path)?;
-    load_yaml_from_string(raw)
+    manifest_from_string(raw)
 }
 
-fn load_yaml_from_string(raw: String) -> Result<Yaml> {
+/// Parse a string and return a `yaml_rust::Yaml` if possible.
+pub fn manifest_from_string(raw: String) -> Result<Yaml> {
     let docs = YamlLoader::load_from_str(raw.as_str())?;
 
     match docs.len() {
